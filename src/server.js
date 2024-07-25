@@ -1,8 +1,10 @@
-import express from "express";
-import pino from "pino-http";
-import cors from "cors";
+import express from 'express';
+import pino from 'pino-http';
+import cors from 'cors';
 
-const PORT = 3000;
+import env from './utils/env.js';
+
+const PORT = Number(env('PORT'));
 export const setupServer = () => {
   const app = express();
   app.use(express.json());
@@ -10,23 +12,25 @@ export const setupServer = () => {
   app.use(
     pino({
       transport: {
-        target: "pino-pretty",
+        target: 'pino-pretty',
       },
-    })
+    }),
   );
-  app.get("/", (req, res) => {
+  app.get('/', (req, res) => {
     res.json({
-      message: "Hello word",
+      message: 'Hello word',
     });
   });
-  app.use("*", (req, res, next) => {
+  // eslint-disable-next-line no-unused-vars
+  app.use('*', (req, res, next) => {
     res.status(404).json({
-      message: "Not found",
+      message: 'Not found',
     });
   });
+  // eslint-disable-next-line no-unused-vars
   app.use((err, req, res, next) => {
     res.status(500).json({
-      message: "Something went wrong",
+      message: 'Something went wrong',
       error: err.message,
     });
   });
