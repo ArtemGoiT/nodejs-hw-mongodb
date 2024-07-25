@@ -2,7 +2,7 @@ import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
 
-import env from './utils/env.js';
+import { env } from './utils/env.js';
 
 const PORT = Number(env('PORT'));
 export const setupServer = () => {
