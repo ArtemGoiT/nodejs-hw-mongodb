@@ -22,8 +22,9 @@ export const setupServer = () => {
     try {
       const contacts = await getAllContacts();
       res.status(200).json({
-        data: contacts,
+        status: 200,
         message: 'Successfully found contacts!',
+        data: contacts,
       });
     } catch (error) {
       next(error);
@@ -38,13 +39,16 @@ export const setupServer = () => {
 
       if (!contact) {
         return res.status(404).json({
+          status: 404,
           message: 'Contact not found',
+          data: null,
         });
       }
 
       res.status(200).json({
-        data: contact,
+        status: 200,
         message: `Successfully found contact with id ${contactId}!`,
+        data: contact,
       });
     } catch (error) {
       next(error);
@@ -54,15 +58,18 @@ export const setupServer = () => {
   // eslint-disable-next-line no-unused-vars
   app.use((req, res, next) => {
     res.status(404).json({
+      status: 404,
       message: 'Not found',
+      data: null,
     });
   });
 
   // eslint-disable-next-line no-unused-vars
   app.use((err, req, res, next) => {
     res.status(500).json({
+      status: 500,
       message: 'Something went wrong',
-      error: err.message,
+      data: { error: err.message },
     });
   });
   app.listen(PORT, () => {
