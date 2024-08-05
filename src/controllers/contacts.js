@@ -1,5 +1,9 @@
 import createHttpError from 'http-errors';
-import { getAllContacts, getContactByID } from '../services/contacts';
+import {
+  createContacts,
+  getAllContacts,
+  getContactByID,
+} from '../services/contacts.js';
 
 // eslint-disable-next-line no-unused-vars
 export const getContactsController = async (req, res, next) => {
@@ -23,3 +27,16 @@ export const getContactByIDController = async (req, res, next) => {
     data: contact,
   });
 };
+
+export const createContactController = async (req, res) => {
+  const contact = await createContacts(req.body);
+  res.status(201).json({
+    status: 201,
+    message: 'Successfully created a student!',
+    data: contact,
+  });
+};
+
+export const patchContactController = async (req, res) => {
+  const contact =
+}
