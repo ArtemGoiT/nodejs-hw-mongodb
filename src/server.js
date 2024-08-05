@@ -3,6 +3,8 @@ import pino from 'pino-http';
 import cors from 'cors';
 import contactsRouter from '../src/routers/contacts.js';
 import { env } from './utils/env.js';
+import { notFoundHandler } from './middleware/notFoundHadler.js';
+import { errorHandler } from './middleware/errorHadler.js';
 
 const PORT = Number(env('PORT'));
 export const setupServer = () => {
@@ -17,24 +19,9 @@ export const setupServer = () => {
     }),
   );
   app.use(contactsRouter);
+  app.use('*', notFoundHandler);
+  app.use(errorHandler);
 
-  // eslint-disable-next-line no-unused-vars
-  app.use((req, res, next) => {
-    res.status(404).json({
-      status: 404,
-      message: 'Not found',
-      data: null,
-    });
-  });
-
-  // eslint-disable-next-line no-unused-vars
-  app.use((err, req, res, next) => {
-    res.status(500).json({
-      status: 500,
-      message: 'Something went wrong',
-      data: { error: err.message },
-    });
-  });
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
