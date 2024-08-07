@@ -20,7 +20,7 @@ export const createContacts = async (payload) => {
   return contact;
 };
 export const updateContact = async (contactId, payload, options = {}) => {
-  const opaResult = await ContactCollection.findByIdAndUpdate(
+  const opaResult = await ContactCollection.findOneAndUpdate(
     { _id: contactId },
     payload,
     {
@@ -38,7 +38,7 @@ export const updateContact = async (contactId, payload, options = {}) => {
 };
 
 export const deleteContact = async (contactId) => {
-  const contact = await ContactCollection.findByIdAndDelete({
+  const contact = await ContactCollection.findOneAndDelete({
     _id: contactId,
   });
   return contact;
