@@ -1,10 +1,32 @@
+import { SORT_ORDER } from '../constants/index.js';
 import { ContactCollection } from '../db/models/contact.js';
+import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
-export const getAllContacts = async () => {
+export const getAllContacts = async ({
+  page,
+  perPage,
+  sortOrder = SORT_ORDER.ASC,
+  sortBy = '_id',
+}) => {
   try {
-    const contacts = await ContactCollection.find();
+    const limit = perPage;
+    const skip = (page - 1) * perPage;
+    const contactsQuery = ContactCollection.find();
+    const contactsCount = await ContactCollection.find()
+      .merge(contactsQuery)
+      .countDocuments();
+    const contacts = await contactsQuery
+      .skip(skip)
+      .limit(limit)
+      .sort({ [sortBy]: sortOrder })
+      .exec();
+    const paginationData = calculatePaginationData(
+      contactsCount,
+      perPage,
+      page,
+    );
     console.log('Contacts:', contacts); // Вывод всех контактов
-    return contacts;
+    return { data: contacts, ...paginationData };
   } catch (error) {
     console.error('Error fetching contacts:', error);
     throw error; // Или можно вернуть пустой массив []
