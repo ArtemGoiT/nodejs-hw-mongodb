@@ -15,14 +15,14 @@ export const getContactsController = async (req, res, next) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
   const filter = parseFilterParams(req.query);
-  const userId = req.user._id;
+
   const contacts = await getAllContacts({
     page,
     perPage,
     sortBy,
     sortOrder,
     filter,
-    userId,
+    userId: req.user._id,
   });
   res.json({
     status: 200,
@@ -33,10 +33,13 @@ export const getContactsController = async (req, res, next) => {
 // eslint-disable-next-line no-unused-vars
 export const getContactByIDController = async (req, res, next) => {
   const { contactId } = req.params;
-  const userId = req._user.id;
+  const userId = req.user._id;
   const contact = await getContactByID(contactId, userId);
   if (!contact) {
     throw createHttpError(404, 'Contact no found');
+  }
+  if (contact.userId.toString() !== userId.toString()) {
+    return next(createHttpError(403, 'Access denied'));
   }
   res.json({
     status: 200,
@@ -47,7 +50,8 @@ export const getContactByIDController = async (req, res, next) => {
 
 export const createContactController = async (req, res) => {
   const userId = req.user._id;
-  const contact = await createContacts(req.body, userId);
+  const payload = { ...req.body, userId };
+  const contact = await createContacts(payload, userId);
 
   res.status(201).json({
     status: 201,
