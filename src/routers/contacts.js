@@ -14,15 +14,17 @@ import {
   createContactsSchema,
   updateContactsSchema,
 } from '../validation/contacts.js';
+import { authenticate } from '../middleware/authenticate.js';
 
 const router = Router();
+router.use(authenticate);
 
 router.get('/', ctrlWrapper(getContactsController));
 
 router.get('/:contactId', isValidId, ctrlWrapper(getContactByIDController));
 
 router.post(
-  '/register',
+  '/',
   validateBody(createContactsSchema),
   ctrlWrapper(createContactController),
 );
