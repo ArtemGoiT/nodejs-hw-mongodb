@@ -30,7 +30,7 @@ export const getContactsController = async (req, res, next) => {
     data: contacts,
   });
 };
-// eslint-disable-next-line no-unused-vars
+
 export const getContactByIDController = async (req, res, next) => {
   const { contactId } = req.params;
   const userId = req.user._id;

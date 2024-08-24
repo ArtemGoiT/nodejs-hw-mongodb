@@ -1,3 +1,7 @@
+import handlebars from 'handlebars';
+import path from 'node:path';
+import fs from 'node:fs/promises';
+
 import createHttpError from 'http-errors';
 import { UsersCollection } from '../db/models/userShcema.js';
 import bcrypt from 'bcrypt';
@@ -6,6 +10,7 @@ import { randomBytes } from 'crypto';
 import {
   ACCESS_TOKEN_EXPIRY,
   REFRESH_TOKEN_EXPIRY,
+  TEMPLATES_DIR,
 } from '../constants/index.js';
 import { sendEmail } from '../utils/sendMail.js';
 import { SMTP } from '../constants/index.js';
@@ -94,10 +99,33 @@ export const requestResetToken = async (email) => {
       expiresIn: '15m',
     },
   );
-  await sendEmail({
-    from: env(SMTP.SMTP_FROM),
-    to: email,
-    subject: 'Reset your password',
-    html: `<p>Click <a> href= "${resetToken}"here</a>to reset</p>`,
+
+  const resetPasswordTemplatePath = path.join(
+    TEMPLATES_DIR,
+    'reset-password.html',
+  );
+
+  const templateSource = (
+    await fs.readFile(resetPasswordTemplatePath)
+  ).toString();
+  const template = handlebars.compile(templateSource);
+  const html = template({
+    name: user.name,
+    link: `${env('APP_DOMAIN')}/reset-password?
+    token=${resetToken}`,
   });
+
+  try {
+    await sendEmail({
+      from: env(SMTP.SMTP_FROM),
+      to: email,
+      subject: 'Reset your password',
+      html,
+    });
+  } catch {
+    throw createHttpError(
+      500,
+      'Failed to send reset password email. Please try again later.',
+    );
+  }
 };
