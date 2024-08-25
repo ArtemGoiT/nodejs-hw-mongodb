@@ -4,9 +4,9 @@ export const SORT_ORDER = {
   ASC: 'asc',
   DESC: 'desc',
 };
-export const ACCESS_TOKEN_EXPIRY = 15 * 60 * 1000 * 10000000;
+export const ACCESS_TOKEN_EXPIRY = 15 * 60 * 1000;
 
-export const REFRESH_TOKEN_EXPIRY = 30 * 24 * 60 * 60 * 1000 * 1123123;
+export const REFRESH_TOKEN_EXPIRY = 30 * 24 * 60 * 60 * 1000;
 
 export const SMTP = {
   SMTP_HOST: 'SMTP_HOST',
