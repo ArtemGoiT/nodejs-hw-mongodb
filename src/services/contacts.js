@@ -50,27 +50,16 @@ export const createContacts = async (payload) => {
   const contact = await ContactCollection.create(payload);
   return contact;
 };
-export const updateContact = async (
-  contactId,
-  payload,
-  userId,
-  options = {},
-) => {
+export const updateContact = async (contactId, payload, userId) => {
   const opaResult = await ContactCollection.findOneAndUpdate(
     { _id: contactId, userId },
     payload,
     {
       new: true,
-
-      ...options,
     },
   );
-  if (!updateContact) return null;
 
-  return {
-    contact: opaResult.value,
-    isNew: Boolean(opaResult.lastErrorObject?.upserted),
-  };
+  return opaResult;
 };
 
 export const deleteContact = async (contactId, userId) => {

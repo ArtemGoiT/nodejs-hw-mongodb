@@ -67,10 +67,12 @@ export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const photo = req.file;
   let photoUrl;
+  console.log('Request params:', req.params);
+  console.log('contactId:', contactId);
+  console.log('userId:', userId);
   if (photo) {
     photoUrl = await saveFileToUploadDir(photo);
   }
-  console.log('contactId:', contactId);
 
   const result = await updateContact(contactId, userId, {
     ...req.body,
