@@ -50,7 +50,7 @@ export const createContacts = async (payload) => {
   const contact = await ContactCollection.create(payload);
   return contact;
 };
-export const updateContact = async (contactId, payload, userId) => {
+export const updateContact = async (contactId, userId, payload) => {
   const opaResult = await ContactCollection.findOneAndUpdate(
     { _id: contactId, userId },
     payload,
