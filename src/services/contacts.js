@@ -13,17 +13,16 @@ export const getAllContacts = async ({
   try {
     const limit = perPage;
     const skip = (page - 1) * perPage;
-    const contactsQuery = ContactCollection.find();
+    const contactsQuery = ContactCollection.find(userId);
     if (filter.contactType) {
       contactsQuery.where('contactType').equals(filter.contactType);
     }
     if (filter.isFavourite !== undefined) {
       contactsQuery.where('isFavourite').equals(filter.isFavourite);
     }
-    contactsQuery.where('userId').equals(userId);
 
     const [contactsCount, contacts] = await Promise.all([
-      ContactCollection.find().merge(contactsQuery).countDocuments(),
+      ContactCollection.find(userId).merge(contactsQuery).countDocuments(),
       contactsQuery
         .skip(skip)
         .limit(limit)
@@ -62,15 +61,15 @@ export const updateContact = async (
     payload,
     {
       new: true,
-      includeResultMetadata: true,
+
       ...options,
     },
   );
-  if (!opaResult || !opaResult.value) return null;
+  if (!updateContact) return null;
 
   return {
     contact: opaResult.value,
-    isNew: Boolean(opaResult?.lastErrorObject?.upserted),
+    isNew: Boolean(opaResult.lastErrorObject?.upserted),
   };
 };
 

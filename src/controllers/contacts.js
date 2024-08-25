@@ -9,6 +9,7 @@ import {
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
 // eslint-disable-next-line no-unused-vars
 export const getContactsController = async (req, res, next) => {
@@ -35,6 +36,7 @@ export const getContactByIDController = async (req, res, next) => {
   const { contactId } = req.params;
   const userId = req.user._id;
   const contact = await getContactByID(contactId, userId);
+
   if (!contact) {
     throw createHttpError(404, 'Contact no found');
   }
@@ -63,7 +65,19 @@ export const createContactController = async (req, res) => {
 export const patchContactController = async (req, res, next) => {
   const userId = req.user._id;
   const { contactId } = req.params;
-  const result = await updateContact(contactId, req.body, userId);
+  const photo = req.file;
+  let photoUrl;
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+  console.log('contactId:', contactId);
+
+  const result = await updateContact(contactId, userId, {
+    ...req.body,
+    photo: photoUrl,
+  });
+  console.log(result);
+
   if (!result) {
     next(createHttpError(404, 'Contacts not found'));
     return;
