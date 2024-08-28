@@ -1,0 +1,76 @@
+tags:
+  - Authentication
+summary: Request Password Reset
+operationId: requestPasswordReset
+description: 'Request a password reset link by providing the user’s email address.'
+requestBody:
+  description: 'User email for password reset request.'
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+        properties:
+          email:
+            type: string
+            format: email
+            example: 'john.doe@example.com'
+            description: 'The email address associated with the user’s account. Must be a valid email format.'
+responses:
+  '200':
+    description: Password reset email sent successfully.
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Password reset email sent successfully!'
+  '400':
+    description: Bad request, invalid input data.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: 'Invalid email format. Please check the provided email address.'
+  '404':
+    description: User not found.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: 'User with the provided email address not found.'
+  '500':
+    description: Internal server error.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 500
+            message:
+              type: string
+              example: 'An unexpected error occurred.'

@@ -1,0 +1,85 @@
+
+
+  tags:
+      - Authentication
+  summary: Login a user
+  operationId: loginUser
+  description: Authenticate a user and return a token.
+  requestBody:
+      description: User login credentials.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+                format: email
+                example: 'john.doe@example.com'
+              password:
+                type: string
+                example: 'P@ssw0rd'
+    responses:
+      '200':
+        description: Successfully logged in
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+                - message
+                - token
+              properties:
+                status:
+                  type: integer
+                  example: 200
+                message:
+                  type: string
+                  example: Successfully logged in!
+                token:
+                  type: string
+                  example: 'eyJhbGciOiJIUzI0NiIsInR5cCI6IkpXVCJ9...'
+      '400':
+        description: Bad request, invalid input data.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+                  example: 400
+                message:
+                  type: string
+                  example: Invalid input data.
+      '401':
+        description: Unauthorized, invalid credentials.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+                  example: 401
+                message:
+                  type: string
+                  example: Invalid email or password.
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+                  example: 500
+                message:
+                  type: string
+                  example: An unexpected error occurred.

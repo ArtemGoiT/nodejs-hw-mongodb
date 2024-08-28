@@ -1,0 +1,54 @@
+tags:
+  - Authentication
+summary: Logout a user
+operationId: logoutUser
+description: 'Logout a user by invalidating the current session or token.'
+responses:
+  '200':
+    description: Successfully logged out
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 200
+              description: 'HTTP status code indicating the user has successfully logged out.'
+            message:
+              type: string
+              example: Successfully logged out!
+              description: 'Message confirming successful logout.'
+  '401':
+    description: Unauthorized, invalid or missing token.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 401
+              description: 'HTTP status code indicating unauthorized access due to invalid or missing token.'
+            message:
+              type: string
+              example: Unauthorized. Invalid or missing token.
+              description: 'Message indicating the cause of unauthorized access.'
+  '500':
+    description: Internal server error
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 500
+              description: 'HTTP status code indicating an internal server error.'
+            message:
+              type: string
+              example: An unexpected error occurred.
+              description: 'Message indicating an unexpected server error.'

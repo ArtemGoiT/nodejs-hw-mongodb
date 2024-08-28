@@ -1,0 +1,80 @@
+tags:
+  - Authentication
+summary: Reset Password
+operationId: resetPassword
+description: 'Reset the user’s password using a valid reset token.'
+requestBody:
+  description: 'Payload for resetting the password.'
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - password
+          - token
+        properties:
+          password:
+            type: string
+            example: 'NewP@ssw0rd'
+            description: 'The new password for the user’s account. This field is required.'
+          token:
+            type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+            description: 'The reset token sent to the user’s email. This field is required.'
+responses:
+  '200':
+    description: Password reset successfully.
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Password reset successfully!'
+  '400':
+    description: Bad request, invalid input data.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: 'Invalid token or password format.'
+  '401':
+    description: Unauthorized, invalid or expired token.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 401
+            message:
+              type: string
+              example: 'The reset token is invalid or has expired.'
+  '500':
+    description: Internal server error.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 500
+            message:
+              type: string
+              example: 'An unexpected error occurred.'
