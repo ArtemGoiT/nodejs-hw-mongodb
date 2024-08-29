@@ -377,6 +377,9 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           }
         }
       },
@@ -658,13 +661,312 @@
           }
         }
       }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "User registration",
+        "operationId": "registerUser",
+        "description": "Register a new user with their name, email, and password.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "User's full name",
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 30,
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "description": "User's email address",
+                    "type": "string",
+                    "format": "email",
+                    "example": "johndoe@example.com"
+                  },
+                  "password": {
+                    "description": "User's password",
+                    "type": "string",
+                    "minLength": 6,
+                    "example": "securePassword123"
+                  }
+                },
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          },
+          "description": "User details required for registration."
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully registered the user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "abc123"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "johndoe@example.com"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "User login",
+        "operationId": "loginUser",
+        "description": "Authenticate a user with their email and password.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "User's email address",
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@example.com"
+                  },
+                  "password": {
+                    "description": "User's password",
+                    "type": "string",
+                    "example": "securePassword123"
+                  }
+                }
+              }
+            }
+          },
+          "description": "User credentials required for authentication."
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "token",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login successful!"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                      "description": "JWT token for authenticated user."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid input data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid email or password."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/reset-pwd": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Reset user password",
+        "operationId": "resetPassword",
+        "description": "Allows users to reset their password using a provided token and new password.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "password",
+                  "token"
+                ],
+                "properties": {
+                  "password": {
+                    "description": "The new password that the user wants to set.",
+                    "type": "string",
+                    "minLength": 6,
+                    "example": "newPassword123!"
+                  },
+                  "token": {
+                    "description": "The token used to verify the password reset request.",
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Password reset details including the new password and reset token."
+        },
+        "responses": {
+          "200": {
+            "description": "Password successfully reset",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Password has been successfully reset."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid input data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid input data for password reset."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
     }
   },
   "components": {
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     },
     "schemas": {
@@ -765,37 +1067,67 @@
             }
           }
         }
+      },
+      "404": {
+        "description": "Page Not Found, the requested resource could not be found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "The requested resource could not be found."
+                }
+              }
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "Conflict, email already exists.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 409
+                },
+                "message": {
+                  "type": "string",
+                  "example": "A user with this email already exists."
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal server error.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "example": "An unexpected error occurred."
+                }
+              }
+            }
+          }
+        }
       }
-    }
-  },
-  "/auth/register": {
-    "post": {
-      "$ref": "../swagger/paths/auth/register.yaml"
-    }
-  },
-  "/auth/login": {
-    "post": {
-      "$ref": "../swagger/paths/auth/login.yaml"
-    }
-  },
-  "/auth/refresh": {
-    "post": {
-      "$ref": "../swagger/paths/auth/refresh.yaml"
-    }
-  },
-  "/auth/logout": {
-    "post": {
-      "$ref": "../swagger/paths/auth/logout.yaml"
-    }
-  },
-  "/auth/reset-pwd": {
-    "post": {
-      "$ref": "../swagger/paths/auth/reset-pwd.yaml"
-    }
-  },
-  "/auth/send-reset-email": {
-    "post": {
-      "$ref": "../swagger/paths/auth/send-reset-email.yaml"
     }
   }
 }
