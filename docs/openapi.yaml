@@ -44,15 +44,15 @@ paths:
     post:
       $ref: ../swagger/paths/auth/resetpwd.yaml
 
-  # /auth/refresh:
-  #   post:
-  #     $ref: ../swagger/paths/auth/refresh.yaml
-  # /auth/logout:
-  #   post:
-  #     $ref: ../swagger/paths/auth/logout.yaml
-  # /auth/send-reset-email:
-  #   post:
-  #     $ref: ../swagger/paths/auth/send-reset-email.yaml
+  /auth/send-reset-email:
+    post:
+      $ref: ../swagger/paths/auth/sendresetemail.yaml
+  /auth/refresh:
+    post:
+      $ref: ../swagger/paths/auth/refresh.yaml
+  /auth/logout:
+    post:
+      $ref: ../swagger/paths/auth/logout.yaml
 
 components:
   securitySchemes:

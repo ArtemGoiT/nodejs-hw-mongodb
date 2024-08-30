@@ -1,0 +1,48 @@
+tags:
+  - Authentication
+summary: Refresh authentication token
+operationId: refreshToken
+description: 'Refresh the user’s authentication token using a valid refresh token.'
+security:
+  - bearerAuth: []
+requestBody:
+  description: 'Refresh token required to obtain a new access token.'
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - refreshToken
+        properties:
+          refreshToken:
+            description: 'The refresh token used to obtain a new access token.'
+            type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+responses:
+  '200':
+    description: Token successfully refreshed
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - token
+          properties:
+            status:
+              type: integer
+              example: 200
+            token:
+              type: string
+              description: 'New JWT access token'
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+            message:
+              type: string
+              example: 'Token has been successfully refreshed.'
+  '400':
+    $ref: '../../components/responses/400.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'
