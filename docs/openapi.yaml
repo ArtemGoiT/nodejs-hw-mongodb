@@ -10,7 +10,7 @@ info:
 tags:
   - name: Contacts
     description: Operations about contacts.
-  - name: Auth
+  - name: Authentication
     description: Authentication operations.
 
 servers:

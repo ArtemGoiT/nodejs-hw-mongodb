@@ -23,7 +23,7 @@
       "description": "Operations about contacts."
     },
     {
-      "name": "Auth",
+      "name": "Authentication",
       "description": "Authentication operations."
     }
   ],
