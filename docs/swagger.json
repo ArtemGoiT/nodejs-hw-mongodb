@@ -662,7 +662,7 @@
         }
       }
     },
-    "/auth/register": {
+    "/authentication/register": {
       "post": {
         "tags": [
           "Authentication"
@@ -762,7 +762,7 @@
         }
       }
     },
-    "/auth/login": {
+    "/authentication/login": {
       "post": {
         "tags": [
           "Authentication"
@@ -862,7 +862,7 @@
         }
       }
     },
-    "/auth/reset-pwd": {
+    "/authentication/reset-pwd": {
       "post": {
         "tags": [
           "Authentication"
@@ -960,7 +960,7 @@
         }
       }
     },
-    "/auth/send-reset-email": {
+    "/authentication/send-reset-email": {
       "post": {
         "tags": [
           "Authentication"
@@ -1029,7 +1029,7 @@
         }
       }
     },
-    "/auth/refresh": {
+    "/authentication/refresh": {
       "post": {
         "tags": [
           "Authentication"
@@ -1105,7 +1105,7 @@
         }
       }
     },
-    "/auth/logout": {
+    "/authentication/logout": {
       "post": {
         "tags": [
           "Authentication"
